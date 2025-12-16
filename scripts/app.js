@@ -1,10 +1,13 @@
 
+const currentTemp = document.getElementById("currentTemp")
+
 // Geolocation script (DELETE LATER)-----------------------------
 const button = document.getElementById("getLocationBtn");
 const output = document.getElementById("output");
 const placeholder = document.getElementById("placeholder");
 let latitude
 let longitude
+let time=" AM"
 
 button.addEventListener("click", () => {
     // Check if the browser supports geolocation
@@ -25,16 +28,7 @@ button.addEventListener("click", () => {
             output.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
             placeholder.innerText = "We got your location, check the console log to see an API.call for your weather"
 
-            fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=2b57bc1f521b636a4b9bc646449dbdf8`) // Replace with your API endpoint
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('No API fond');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log(data);
-                })
+            fetchAPI()
 
         },
 
@@ -60,3 +54,67 @@ button.addEventListener("click", () => {
 
 });
 // END of geolocation script----------------------------------------
+
+
+// Clock----------
+function startTime() {
+    const today = new Date();
+    let h = today.getHours();
+    let m = today.getMinutes();
+
+
+    // Add a leading zero to numbers less than 10 (e.g., 01, 05)
+    m = checkTime(m);
+    h = amPM(h)
+
+    // Update the content of the 'clock' element
+    document.getElementById('clock').innerHTML = h + ":" + m + time;
+
+    // Call the function again after 500 milliseconds (half a second)
+    const t = setTimeout(startTime, 500);
+}
+
+function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+function amPM(i){
+    if (i>12){
+        i=i-12
+        time=" PM"
+        return i
+    }
+    else if(i=0){
+        i=12
+        return i
+    }
+}
+//END of clock------------------------------------
+
+function fetchAPI() {
+    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=${API_KEY}`) // Replace with your API endpoint
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No API fond');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            console.log(data.main.temp);
+        currentTemp.innerText=data.main.temp + "°F";
+        console.log(data.main.humidity);
+        humidity.innerText="Humidity: "+data.main.humidity+ "%";
+        console.log(data.main.pressure);
+        pressure.innerText="Pressure: "+data.main.pressure+ "hPa";
+
+        })
+        
+
+}
+
+
+
