@@ -1,13 +1,25 @@
 
 const currentTemp = document.getElementById("currentTemp")
-
+const searchInput = document.getElementById("searchInput")
+let city
+let lowTemp1 = 10000000
+let highTemp1 = -10000000
+let lowTemp2 = 10000000
+let highTemp2 = -10000000
+let lowTemp3 = 10000000
+let highTemp3 = -10000000
+let lowTemp4 = 10000000
+let highTemp4 = -10000000
+let lowTemp5 = 10000000
+let highTemp5 = -10000000
 // Geolocation script (DELETE LATER)-----------------------------
 const button = document.getElementById("getLocationBtn");
 const output = document.getElementById("output");
 const placeholder = document.getElementById("placeholder");
 let latitude
-let longitude
-let time=" AM"
+let longitude = 0.1
+let time = " AM"
+let timezone = -480
 
 button.addEventListener("click", () => {
     // Check if the browser supports geolocation
@@ -29,6 +41,7 @@ button.addEventListener("click", () => {
             placeholder.innerText = "We got your location, check the console log to see an API.call for your weather"
 
             fetchAPI()
+            fetchForecast()
 
         },
 
@@ -53,44 +66,19 @@ button.addEventListener("click", () => {
 
 
 });
-// END of geolocation script----------------------------------------
 
-
-// Clock----------
 function startTime() {
     const today = new Date();
-    let h = today.getHours();
-    let m = today.getMinutes();
+    let timezoneOffset = today.getTimezoneOffset();
+    let hourMinute = {
+        hour: 'numeric',
+        minute: 'numeric',
+    };
+    let adjustedTime = new Date(today.getTime() + (timezone + timezoneOffset) * 60 * 1000);
+    let DateTime = adjustedTime.toLocaleString('en-US', hourMinute);
+    document.getElementById('clock').innerHTML = DateTime
 
-
-    // Add a leading zero to numbers less than 10 (e.g., 01, 05)
-    m = checkTime(m);
-    h = amPM(h)
-
-    // Update the content of the 'clock' element
-    document.getElementById('clock').innerHTML = h + ":" + m + time;
-
-    // Call the function again after 500 milliseconds (half a second)
     const t = setTimeout(startTime, 500);
-}
-
-function checkTime(i) {
-    if (i < 10) {
-        i = "0" + i;
-    }
-    return i;
-}
-
-function amPM(i){
-    if (i>12){
-        i=i-12
-        time=" PM"
-        return i
-    }
-    else if(i=0){
-        i=12
-        return i
-    }
 }
 //END of clock------------------------------------
 
@@ -105,16 +93,135 @@ function fetchAPI() {
         .then(data => {
             console.log(data);
             console.log(data.main.temp);
-        currentTemp.innerText=data.main.temp + "°F";
-        console.log(data.main.humidity);
-        humidity.innerText="Humidity: "+data.main.humidity+ "%";
-        console.log(data.main.pressure);
-        pressure.innerText="Pressure: "+data.main.pressure+ "hPa";
-
+            currentTemp.innerText = data.main.temp + "°F";
+            console.log(data.main.humidity);
+            humidity.innerText = "Humidity: " + data.main.humidity + "%";
+            console.log(data.main.pressure);
+            pressure.innerText = "Pressure: " + data.main.pressure + "hPa";
+            console.log(data.wind.speed);
+            windSpeed.innerText = "Wind Speed: " + data.wind.speed + "mph";
+            console.log(data.main.temp_max);
+            highTemp.innerText = "Daily high: " + data.main.temp_max + "°F";
+            console.log(data.main.temp_min);
+            lowTemp.innerText = "Daily low: " + data.main.temp_min + "°F";
+            currentCity.innerText = data.name + ", " + data.sys.country;
         })
-        
+
+
+}
+const currentDate = new Date()
+const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+const dayName = { weekday: 'long' };
+console.log(currentDate.toLocaleDateString('en-US', dateOptions));
+currentDay.innerText = currentDate.toLocaleDateString('en-US', dateOptions)
+console.log(currentDate.toLocaleDateString('en-US', dayName));
+weekDay.innerText = currentDate.toLocaleDateString('en-US', dayName) + " (Today)"
+
+// -----------------City Search----------------
+searchInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        city = searchInput.value;
+        findLocation()
+        searchInput.value = ""
+    }
+})
+
+//---------------END of City Search------------------
+
+
+function findLocation() {
+    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_KEY}`) // Replace with your API endpoint
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No API fond');
+
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data)
+            latitude = data[0].lat
+            longitude = data[0].lon
+
+            timezone = (Math.floor(longitude / 15)) * 60
+            console.log(timezone)
+
+            fetchAPI()
+            fetchForecast()
+        })
+
+
 
 }
 
+function fetchForecast() {
+    fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&appid=${API_KEY}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('No API fond');
 
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data)
+            for (let i = 0; i < 8; i++) {
+                if (lowTemp1 > data.list[i].main.temp_min) {
+                    lowTemp1 = data.list[i].main.temp_min
+                }
+                if (highTemp1 < data.list[i].main.temp_max) {
+                    highTemp1 = data.list[i].main.temp_max
+                }
 
+            }
+            highTempFore1.innerText = highTemp1 + "°F"
+            lowTempFore1.innerText = lowTemp1 + "°F"
+            for (let i = 8; i < 16; i++) {
+                if (lowTemp2 > data.list[i].main.temp_min) {
+                    lowTemp2 = data.list[i].main.temp_min
+                }
+                if (highTemp2 < data.list[i].main.temp_max) {
+                    highTemp2 = data.list[i].main.temp_max
+                }
+
+            }
+            highTempFore2.innerText = highTemp2 + "°F"
+            lowTempFore2.innerText = lowTemp2 + "°F"
+
+            for (let i = 16; i < 24; i++) {
+                if (lowTemp3 > data.list[i].main.temp_min) {
+                    lowTemp3 = data.list[i].main.temp_min
+                }
+                if (highTemp3 < data.list[i].main.temp_max) {
+                    highTemp3 = data.list[i].main.temp_max
+                }
+
+            }
+            highTempFore3.innerText = highTemp3 + "°F"
+            lowTempFore3.innerText = lowTemp3 + "°F"
+
+            for (let i = 24; i < 32; i++) {
+                if (lowTemp4 > data.list[i].main.temp_min) {
+                    lowTemp4 = data.list[i].main.temp_min
+                }
+                if (highTemp4 < data.list[i].main.temp_max) {
+                    highTemp4 = data.list[i].main.temp_max
+                }
+
+            }
+            highTempFore4.innerText = highTemp4 + "°F"
+            lowTempFore4.innerText = lowTemp4 + "°F"
+
+            for (let i = 32; i < 40; i++) {
+                if (lowTemp5 > data.list[i].main.temp_min) {
+                    lowTemp5 = data.list[i].main.temp_min
+                }
+                if (highTemp5 < data.list[i].main.temp_max) {
+                    highTemp5 = data.list[i].main.temp_max
+                }
+
+            }
+            highTempFore5.innerText = highTemp5 + "°F"
+            lowTempFore5.innerText = lowTemp5 + "°F"
+        })
+}

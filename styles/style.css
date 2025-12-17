@@ -73,3 +73,7 @@ p{
 .height-hourly{
     height: 300px;
 }
+
+.searchBar{
+    width: 95%;
+}
