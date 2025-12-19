@@ -26,7 +26,6 @@ const placeholder = document.getElementById("placeholder");
 
 
 function geoData() {
-    // Check if the browser supports geolocation
     if (!navigator.geolocation) {
         output.textContent = "Geolocation is not supported by your browser.";
         return;
@@ -34,7 +33,7 @@ function geoData() {
 
 
     navigator.geolocation.getCurrentPosition(
-        // Success callback
+        
         (position) => {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
@@ -103,17 +102,17 @@ function fetchAPI() {
         .then(data => {
             console.log(data);
             console.log(data.main.temp);
-            currentTemp.innerText = data.main.temp + "°F";
+            currentTemp.innerText = Math.floor(data.main.temp) + "°F";
             console.log(data.main.humidity);
             humidity.innerText = "Humidity: " + data.main.humidity + "%";
             console.log(data.main.pressure);
             pressure.innerText = "Pressure: " + data.main.pressure + "hPa";
             console.log(data.wind.speed);
-            windSpeed.innerText = "Wind Speed: " + data.wind.speed + "mph";
+            windSpeed.innerText = "Wind Speed: " + Math.floor(data.wind.speed) + "mph";
             console.log(data.main.temp_max);
-            highTemp.innerText = "Daily high: " + data.main.temp_max + "°F";
+            highTemp.innerText = "Daily high: " + Math.floor(data.main.temp_max) + "°F";
             console.log(data.main.temp_min);
-            lowTemp.innerText = "Daily low: " + data.main.temp_min + "°F";
+            lowTemp.innerText = "Daily low: " + Math.floor(data.main.temp_min)  + "°F";
             currentCity.innerText = data.name + ", " + data.sys.country;
             console.log(data.clouds.all)
             clouds.innerText="Cloudiness: "+ data.clouds.all+"%" ;
@@ -269,8 +268,8 @@ function fetchForecast() {
                 }
 
             }
-            highTempFore1.innerText = highTemp1 + "°F"
-            lowTempFore1.innerText = lowTemp1 + "°F"
+            highTempFore1.innerText = Math.floor(highTemp1) + "°F"
+            lowTempFore1.innerText = Math.floor(lowTemp1) + "°F"
             for (let i = 8; i < 16; i++) {
                 if (lowTemp2 > data.list[i].main.temp_min) {
                     lowTemp2 = data.list[i].main.temp_min
@@ -280,8 +279,8 @@ function fetchForecast() {
                 }
 
             }
-            highTempFore2.innerText = highTemp2 + "°F"
-            lowTempFore2.innerText = lowTemp2 + "°F"
+            highTempFore2.innerText = Math.floor(highTemp2) + "°F"
+            lowTempFore2.innerText = Math.floor(lowTemp2) + "°F"
 
             for (let i = 16; i < 24; i++) {
                 if (lowTemp3 > data.list[i].main.temp_min) {
@@ -292,8 +291,8 @@ function fetchForecast() {
                 }
 
             }
-            highTempFore3.innerText = highTemp3 + "°F"
-            lowTempFore3.innerText = lowTemp3 + "°F"
+            highTempFore3.innerText = Math.floor(highTemp3) + "°F"
+            lowTempFore3.innerText = Math.floor(lowTemp3) + "°F"
 
             for (let i = 24; i < 32; i++) {
                 if (lowTemp4 > data.list[i].main.temp_min) {
@@ -304,8 +303,8 @@ function fetchForecast() {
                 }
 
             }
-            highTempFore4.innerText = highTemp4 + "°F"
-            lowTempFore4.innerText = lowTemp4 + "°F"
+            highTempFore4.innerText = Math.floor(highTemp4) + "°F"
+            lowTempFore4.innerText = Math.floor(lowTemp4) + "°F"
 
             for (let i = 32; i < 40; i++) {
                 if (lowTemp5 > data.list[i].main.temp_min) {
@@ -316,8 +315,8 @@ function fetchForecast() {
                 }
 
             }
-            highTempFore5.innerText = highTemp5 + "°F"
-            lowTempFore5.innerText = lowTemp5 + "°F"
+            highTempFore5.innerText = Math.floor(highTemp5) + "°F"
+            lowTempFore5.innerText = Math.floor(lowTemp5) + "°F"
 
 
             forecastHumidity1.innerText = data.list[4].main.humidity + "%"
@@ -561,7 +560,7 @@ const displayFavs = () => {
 
         deleteBtn.addEventListener('click', () => {
             removeFromStorage(city)
-            p.remove() //remove the Paragraph tag fromn the DOM
+            p.remove() 
         })
         p.appendChild(deleteBtn)
 
@@ -584,11 +583,9 @@ const displayFavs = () => {
 
 
 const saveToStorage = (city) => {
-    //creating an array of value to store into local storage
     let cityArr = getLocalStorage();
 
 
-    //add a new name into our array
     if (!cityArr.includes(city)) {
         cityArr.push(city);
     }
@@ -598,31 +595,22 @@ const saveToStorage = (city) => {
 }
 
 //---------------------local Storage js-------------------
-//Retriving data from our local storage
 
 const getLocalStorage = () => {
-    //the data we're is an array
 
     let value = localStorage.getItem('Cities')
 
-    //we check if null because we will be using a forEach and if we don't return the array our code will break
     if (value === null) {
         return [];
     }
-    //JSON.parse coverts the string back into an array (or Original Form)
     return JSON.parse(value)
 }
 
 
-//removing data from our local srorage *without the removeItem method
 
 const removeFromStorage = (city) => {
-    //name=Jesus
-    // nameIndex=1
 
     let cityArr = getLocalStorage()
-
-    //find the index of the name in local storage
     let cityIndex = cityArr.indexOf(city)
 
     cityArr.splice(cityIndex, 1)

@@ -15,11 +15,11 @@ h2{
 }
 
 h5{
-    font-size: 16px;
+    font-size: 20px;
 }
 
 p{
-    font-size: 24px;
+    font-size: 30px;
 }
 
 .grid-main{
@@ -64,10 +64,15 @@ p{
 .bg-grey{
     background-color: lightgray;
     min-height: 70px;
+    text-align: center;
+    justify-content: center ;
+    align-items: center;
 }
 
 .height-extras{
+    display: flex;
     height: 150px;
+    
 }
 
 .bg-white{
