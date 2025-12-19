@@ -1,4 +1,4 @@
-
+let API_KEY = "d453243897e04155e78fee0412ddcf5d";
 const currentTemp = document.getElementById("currentTemp")
 const searchInput = document.getElementById("searchInput")
 const clouds=document.getElementById("clouds")
