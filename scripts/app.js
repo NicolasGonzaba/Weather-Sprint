@@ -1,6 +1,8 @@
 
 const currentTemp = document.getElementById("currentTemp")
 const searchInput = document.getElementById("searchInput")
+const clouds=document.getElementById("clouds")
+const headerIcon=document.getElementById("headerIcon")
 let city
 let lowTemp1 = 10000000
 let highTemp1 = -10000000
@@ -19,19 +21,17 @@ let longTime
 let timezone = -480
 
 // Geolocation script (DELETE LATER)-----------------------------
-const button = document.getElementById("getLocationBtn");
 const output = document.getElementById("output");
 const placeholder = document.getElementById("placeholder");
 
 
-button.addEventListener("click", () => {
+function geoData() {
     // Check if the browser supports geolocation
     if (!navigator.geolocation) {
         output.textContent = "Geolocation is not supported by your browser.";
         return;
     }
 
-    output.textContent = "Getting your location...";
 
     navigator.geolocation.getCurrentPosition(
         // Success callback
@@ -40,8 +40,7 @@ button.addEventListener("click", () => {
             longitude = position.coords.longitude;
 
             console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-            output.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
-            placeholder.innerText = "We got your location, check the console log to see an API.call for your weather"
+            
 
             longTime = longitude
             if (-120 > longTime) {
@@ -54,6 +53,7 @@ button.addEventListener("click", () => {
             console.log(timezone)
             fetchAPI()
             fetchForecast()
+            displayFavs()
 
         },
 
@@ -75,9 +75,7 @@ button.addEventListener("click", () => {
         }
     );
 
-
-
-});
+};
 
 function startTime() {
     const today = new Date();
@@ -117,6 +115,62 @@ function fetchAPI() {
             console.log(data.main.temp_min);
             lowTemp.innerText = "Daily low: " + data.main.temp_min + "°F";
             currentCity.innerText = data.name + ", " + data.sys.country;
+            console.log(data.clouds.all)
+            clouds.innerText="Cloudiness: "+ data.clouds.all+"%" ;
+
+            
+            if (!data.snow) {
+                if(!data.rain){
+                    percipitaion.innerText = "No rain or snow"
+                }else{
+                    console.log(data.rain)
+                percipitaion.innerText = "Rain: "+data.rain["1h"]+"mm/h"
+                }
+            } else {
+                console.log(data.snow)
+                percipitaion.innerText = "Snow: "+data.snow["1h"]+"mm/h"
+            }
+
+            if(data.weather[0].description==="overcast clouds"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/overcastClouds.png" width="310px" alt="overcastClouds"></img>`
+            }else if(data.weather[0].description==="scattered clouds"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/scatteredClouds.png" width="310px" alt="scattered clouds"></img>`
+            }else if(data.weather[0].description==="light rain"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/moderateRain.png" width="310px" alt="moderate rain"></img>`
+            }else if(data.weather[0].description==="moderate rain"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/moderateRain.png" width="310px" alt="moderate rain"></img>`
+            }else if(data.weather[0].description==="heavy intensity rain"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/moderateRain.png" width="310px" alt="moderate rain"></img>`
+            }else if(data.weather[0].description==="snow"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/rainAndSnow.png" width="310px" alt="snow"></img>`
+            }
+            else if(data.weather[0].description==="rain and snow"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/rainAndSnow.png" width="310px" alt="snow"></img>`
+            }else if(data.weather[0].description==="light snow"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/rainAndSnow.png" width="310px" alt="snow"></img>`
+            }else if(data.weather[0].description==="mist"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/mist.png" width="310px" alt="mist"></img>`
+            }
+            else if(data.weather[0].description==="misty"){
+                console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/mist.png" width="310px" alt="mist"></img>`
+            }
+            else {
+               console.log(data.weather[0].description) 
+               headerIcon.innerHTML=`<img src="images/clear skies.png" width="310px" alt="clear skies"></img>`
+            }
+            
+            
+
         })
 
 
@@ -188,7 +242,7 @@ function findLocation() {
 
             fetchAPI()
             fetchForecast()
-            searchInput.value=""
+            searchInput.value = ""
         })
 
 
@@ -271,6 +325,196 @@ function fetchForecast() {
             forecastHumidity3.innerText = data.list[20].main.humidity + "%"
             forecastHumidity4.innerText = data.list[28].main.humidity + "%"
             forecastHumidity5.innerText = data.list[36].main.humidity + "%"
+
+            if(data.list[4].weather[0].description==="overcast clouds"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/overcastClouds.png" width="60px" alt="overcastClouds"></img>`
+            }else if(data.list[4].weather[0].description==="scattered clouds"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/scatteredClouds.png" width="60px" alt="scattered clouds"></img>`
+            }else if(data.list[4].weather[0].description==="light rain"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[4].weather[0].description==="moderate rain"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[4].weather[0].description==="heavy intensity rain"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[4].weather[0].description==="snow"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }
+            else if(data.list[4].weather[0].description==="rain and snow"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[4].weather[0].description==="light snow"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[4].weather[0].description==="mist"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else if(data.list[4].weather[0].description==="misty"){
+                console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else {
+               console.log(data.list[4].weather[0].description) 
+               forecastIcon1.innerHTML=`<img src="images/clear skies.png" width="60px" alt="clear skies"></img>`
+            }
+
+            if(data.list[12].weather[0].description==="overcast clouds"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/overcastClouds.png" width="60px" alt="overcastClouds"></img>`
+            }else if(data.list[12].weather[0].description==="scattered clouds"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/scatteredClouds.png" width="60px" alt="scattered clouds"></img>`
+            }else if(data.list[12].weather[0].description==="light rain"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[12].weather[0].description==="moderate rain"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[12].weather[0].description==="heavy intensity rain"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[12].weather[0].description==="snow"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }
+            else if(data.list[12].weather[0].description==="rain and snow"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[12].weather[0].description==="light snow"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[12].weather[0].description==="mist"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else if(data.list[12].weather[0].description==="misty"){
+                console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else {
+               console.log(data.list[12].weather[0].description) 
+               forecastIcon2.innerHTML=`<img src="images/clear skies.png" width="60px" alt="clear skies"></img>`
+            }
+
+            if(data.list[20].weather[0].description==="overcast clouds"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/overcastClouds.png" width="60px" alt="overcastClouds"></img>`
+            }else if(data.list[20].weather[0].description==="scattered clouds"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/scatteredClouds.png" width="60px" alt="scattered clouds"></img>`
+            }else if(data.list[20].weather[0].description==="light rain"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[20].weather[0].description==="moderate rain"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[20].weather[0].description==="heavy intensity rain"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[20].weather[0].description==="snow"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }
+            else if(data.list[20].weather[0].description==="rain and snow"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[20].weather[0].description==="light snow"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[20].weather[0].description==="mist"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else if(data.list[20].weather[0].description==="misty"){
+                console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else {
+               console.log(data.list[20].weather[0].description) 
+               forecastIcon3.innerHTML=`<img src="images/clear skies.png" width="60px" alt="clear skies"></img>`
+            }
+
+            if(data.list[28].weather[0].description==="overcast clouds"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/overcastClouds.png" width="60px" alt="overcastClouds"></img>`
+            }else if(data.list[28].weather[0].description==="scattered clouds"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/scatteredClouds.png" width="60px" alt="scattered clouds"></img>`
+            }else if(data.list[28].weather[0].description==="light rain"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[28].weather[0].description==="moderate rain"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[28].weather[0].description==="heavy intensity rain"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[28].weather[0].description==="snow"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }
+            else if(data.list[28].weather[0].description==="rain and snow"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[28].weather[0].description==="light snow"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[28].weather[0].description==="mist"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else if(data.list[28].weather[0].description==="misty"){
+                console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else {
+               console.log(data.list[28].weather[0].description) 
+               forecastIcon4.innerHTML=`<img src="images/clear skies.png" width="60px" alt="clear skies"></img>`
+            }
+        
+            if(data.list[36].weather[0].description==="overcast clouds"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/overcastClouds.png" width="60px" alt="overcastClouds"></img>`
+            }else if(data.list[36].weather[0].description==="scattered clouds"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/scatteredClouds.png" width="60px" alt="scattered clouds"></img>`
+            }else if(data.list[36].weather[0].description==="light rain"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[36].weather[0].description==="moderate rain"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[36].weather[0].description==="heavy intensity rain"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/moderateRain.png" width="60px" alt="moderate rain"></img>`
+            }else if(data.list[36].weather[0].description==="snow"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }
+            else if(data.list[36].weather[0].description==="rain and snow"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[36].weather[0].description==="light snow"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/rainAndSnow.png" width="60px" alt="snow"></img>`
+            }else if(data.list[36].weather[0].description==="mist"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else if(data.list[36].weather[0].description==="misty"){
+                console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/mist.png" width="60px" alt="mist"></img>`
+            }
+            else {
+               console.log(data.list[36].weather[0].description) 
+               forecastIcon5.innerHTML=`<img src="images/clear skies.png" width="60px" alt="clear skies"></img>`
+            }
         })
 }
 
@@ -303,10 +547,12 @@ const displayFavs = () => {
     favoriteList.forEach(city => {
         console.log(city)
 
+
         let p = document.createElement('p')
-        p.className = "m-2"
+        p.className = "m-2 bg-grey"
 
         p.textContent = city
+
 
         const deleteBtn = document.createElement('button')
         deleteBtn.type = 'button'

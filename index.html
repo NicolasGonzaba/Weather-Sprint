@@ -10,62 +10,25 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 
-<body onload="startTime()">
+<body onload="startTime(); geoData()">
 
 
-    <button id="getLocationBtn">Get My Location</button>
+    
 
-    <p id="placeholder">Click the button to get your location.</p>
+    <p id="placeholder"></p>
     <p id="output"></p>
 
     <div class="grid-main">
         <div class="grid-favorites">
-            <div class="container">
+            <div class="container" >
                 <div class="row">
                     <div class="col m-2">
                         <input type="text" id="searchInput" placeholder="Search (ex.'Stockton,CA,US')" class="searchBar bg-grey ">
                         <!-- <ul id="city-list" class="bg-white searchBar"></ul> -->
                     </div>
                 </div>
-                <div class="row bg-grey m-2">
-                    <div class="col" id="storedValue">
-
-                    </div>
-                </div>
-                <div class="row bg-grey m-2">
-                    <div class="col">
-                        <p>Favorite 1</p>
-                    </div>
-                </div>
-                <div class="row bg-grey m-2">
-                    <div class="col">
-                        <p>Favorite 2</p>
-                    </div>
-                </div>
-                <div class="row bg-grey m-2">
-                    <div class="col">
-                        <p>Favorite 3</p>
-                    </div>
-                </div>
-                <div class="row bg-grey m-2">
-                    <div class="col">
-                        <p>Favorite 4</p>
-                    </div>
-                </div>
-                <div class="row bg-grey m-2">
-                    <div class="col">
-                        <p>Favorite 5</p>
-                    </div>
-                </div>
-                <div class="row bg-grey m-2">
-                    <div class="col">
-                        <p>Favorite 6</p>
-                    </div>
-                </div>
-                <div class="row bg-grey m-2">
-                    <div class="col">
-                        <p>Favorite 7</p>
-                    </div>
+                <div  id="storedValue">
+                    
                 </div>
 
             </div>
@@ -76,9 +39,6 @@
                 <div class="row">
                     <div class="col-4">
                         <h2 id="currentCity">Stockton, US</h2>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-warning" id="favBtn">Add to Favorites</button>
                     </div>
                 </div>
                 <div class="row">
@@ -101,8 +61,16 @@
                         <h1 id="currentTemp"></h1>
                     </div>
                 </div>
+                
                 <div class="row">
-                    <div class="col"></div>
+                    <div class="col">
+                        <button type="button" class="btn btn-warning" id="favBtn">Add City to Favorites</button>
+                    </div>
+                </div>
+                <div class="row relative">
+                    <div class="col header-i" id="headerIcon">
+                        <img src="images/clear skies.png" width="310px" alt="clear skies">
+                    </div>
                 </div>
             </div>
 
@@ -115,7 +83,8 @@
                         <h3 id="humidity"></h3>
                     </div>
                     <div class="col bg-grey m-3">
-                        <h3 id="pressure"></h3>
+                        <h3 id="highTemp"></h3>
+                        <h3 id="lowTemp"></h3>
                     </div>
                 </div>
                 <div class="row height-extras">
@@ -123,14 +92,21 @@
                         <h3 id="windSpeed"></h3>
                     </div>
                     <div class="col bg-grey m-3">
-                        <h3 id="highTemp"></h3>
-                        <h3 id="lowTemp"></h3>
+                        <h3 id="pressure"></h3>
+                    </div>
+                </div>
+                <div class="row height-extras">
+                    <div class="col bg-grey m-3">
+                        <h3 id="clouds"></h3>
+                    </div>
+                    <div class="col bg-grey m-3">
+                        <h3 id="percipitaion"></h3>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="grid-hourly">
+        <!-- <div class="grid-hourly">
             <div class="container">
                 <div class="row height-hourly">
                     <div class="col bg-white m-2"> Hourly</div>
@@ -141,7 +117,7 @@
                     <div class="col bg-white m-2"></div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="grid-forecast">
             <div class="container">
@@ -152,7 +128,9 @@
                     <div class="col ">
                         <h5 id="forecastHumidity1"></h5>
                     </div>
-                    <div class="col"></div>
+                    <div class="col" id="forecastIcon1">
+
+                    </div>
                     <div class="col">
                         <h5 id="lowTempFore1"></h5>
                         <h5 id="highTempFore1"></h5>
@@ -165,7 +143,7 @@
                     <div class="col">
                         <h5 id="forecastHumidity2"></h5>
                     </div>
-                    <div class="col"></div>
+                    <div class="col" id="forecastIcon2"></div>
                     <div class="col">
                         <h5 id="lowTempFore2"></h5>
                         <h5 id="highTempFore2"></h5>
@@ -178,7 +156,7 @@
                     <div class="col">
                         <h5 id="forecastHumidity3"></h5>
                     </div>
-                    <div class="col"></div>
+                    <div class="col" id="forecastIcon3"></div>
                     <div class="col">
                         <h5 id="lowTempFore3"></h5>
                         <h5 id="highTempFore3"></h5>
@@ -191,7 +169,7 @@
                     <div class="col">
                         <h5 id="forecastHumidity4"></h5>
                     </div>
-                    <div class="col"></div>
+                    <div class="col" id="forecastIcon4"></div>
                     <div class="col">
                         <h5 id="lowTempFore4"></h5>
                         <h5 id="highTempFore4"></h5>
@@ -204,7 +182,7 @@
                     <div class="col">
                         <h5 id="forecastHumidity5"></h5>
                     </div>
-                    <div class="col"></div>
+                    <div class="col" id="forecastIcon5"></div>
                     <div class="col">
                         <h5 id="lowTempFore5"></h5>
                         <h5 id="highTempFore5"></h5>
