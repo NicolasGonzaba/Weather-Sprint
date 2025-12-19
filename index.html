@@ -23,8 +23,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col m-2">
-                        <input type="text" id="searchInput" placeholder="Search Cities" class="searchBar bg-grey ">
+                        <input type="text" id="searchInput" placeholder="Search (ex.'Stockton,CA,US')" class="searchBar bg-grey ">
                         <!-- <ul id="city-list" class="bg-white searchBar"></ul> -->
+                    </div>
+                </div>
+                <div class="row bg-grey m-2">
+                    <div class="col" id="storedValue">
+
                     </div>
                 </div>
                 <div class="row bg-grey m-2">
@@ -69,8 +74,11 @@
         <div class="grid-header">
             <div class="container m-2">
                 <div class="row">
+                    <div class="col-4">
+                        <h2 id="currentCity">Stockton, US</h2>
+                    </div>
                     <div class="col">
-                        <h2 id="currentCity">Stockton, California</h2>
+                        <button type="button" class="btn btn-warning" id="favBtn">Add to Favorites</button>
                     </div>
                 </div>
                 <div class="row">
@@ -138,48 +146,68 @@
         <div class="grid-forecast">
             <div class="container">
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col">
+                        <p id="forecastDate1"></p>
+                    </div>
+                    <div class="col ">
+                        <h5 id="forecastHumidity1"></h5>
+                    </div>
                     <div class="col"></div>
                     <div class="col">
-                        <p id="lowTempFore1"></p>
-                        <p id="highTempFore1"></p>
+                        <h5 id="lowTempFore1"></h5>
+                        <h5 id="highTempFore1"></h5>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col">
+                        <p id="forecastDate2"></p>
+                    </div>
+                    <div class="col">
+                        <h5 id="forecastHumidity2"></h5>
+                    </div>
                     <div class="col"></div>
                     <div class="col">
-                        <p id="lowTempFore2"></p>
-                        <p id="highTempFore2"></p>
+                        <h5 id="lowTempFore2"></h5>
+                        <h5 id="highTempFore2"></h5>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col">
+                        <p id="forecastDate3"></p>
+                    </div>
+                    <div class="col">
+                        <h5 id="forecastHumidity3"></h5>
+                    </div>
                     <div class="col"></div>
                     <div class="col">
-                        <p id="lowTempFore3"></p>
-                        <p id="highTempFore3"></p>
+                        <h5 id="lowTempFore3"></h5>
+                        <h5 id="highTempFore3"></h5>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col">
+                        <p id="forecastDate4"></p>
+                    </div>
+                    <div class="col">
+                        <h5 id="forecastHumidity4"></h5>
+                    </div>
                     <div class="col"></div>
                     <div class="col">
-                        <p id="lowTempFore4"></p>
-                        <p id="highTempFore4"></p>
+                        <h5 id="lowTempFore4"></h5>
+                        <h5 id="highTempFore4"></h5>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col">
+                        <p id="forecastDate5"></p>
+                    </div>
+                    <div class="col">
+                        <h5 id="forecastHumidity5"></h5>
+                    </div>
                     <div class="col"></div>
                     <div class="col">
-                        <p id="lowTempFore5"></p>
-                        <p id="highTempFore5"></p>
+                        <h5 id="lowTempFore5"></h5>
+                        <h5 id="highTempFore5"></h5>
                     </div>
                 </div>
                
